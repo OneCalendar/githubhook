@@ -2,17 +2,26 @@ package controllers
 
 import play.api.mvc._
 import model.Payload
+import play.api.data._
+import play.api.data.Forms._
+import com.codahale.jerkson.Json
 
 object Application extends Controller {
 
   var lastPayload = ""
 
+  case class GithubRequest(payload:String)
+
   def show = Action {
     Ok(lastPayload)
   }
-  def deploy = Action {request =>
+  def deploy = Action {implicit request  =>
 
-    val payload:Payload = payload2json(request)
+    val form = Form(mapping("payload" -> text)(GithubRequest.apply)(GithubRequest.unapply))
+
+    lastPayload = form.bindFromRequest.get.payload
+
+    val payload = Json.parse[Payload](lastPayload)
 
     if (payload.ref.contains("master") && payload.repository.url.contains("OneCalendar")) {
       import sys.process._
@@ -25,14 +34,5 @@ object Application extends Controller {
     } else {
       PreconditionFailed
     }
-  }
-
-  def payload2json(request: Request[AnyContent]) : Payload = {
-    import com.codahale.jerkson.Json
-    import model.Payload
-
-    lastPayload = request.body.asJson.getOrElse("").toString
-
-    Json.parse[Payload](lastPayload)
   }
 }
