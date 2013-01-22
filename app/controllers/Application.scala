@@ -5,7 +5,12 @@ import model.Payload
 
 object Application extends Controller {
 
-  def deploy(path:String) = Action {request =>
+  var lastPayload = ""
+
+  def show = Action {
+    Ok(lastPayload)
+  }
+  def deploy = Action {request =>
 
     val payload:Payload = payload2json(request)
 
@@ -26,7 +31,8 @@ object Application extends Controller {
     import com.codahale.jerkson.Json
     import model.Payload
 
-    val string: String = request.body.asJson.getOrElse("").toString
-    Json.parse[Payload](string)
+    lastPayload = request.body.asJson.getOrElse("").toString
+
+    Json.parse[Payload](lastPayload)
   }
 }

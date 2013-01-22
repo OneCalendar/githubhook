@@ -3,4 +3,5 @@
 # ~~~~
 
 # Home page
-POST     /*path             controllers.Application.deploy(path)
+POST     /             controllers.Application.deploy
+GET      /             controllers.Application.show
