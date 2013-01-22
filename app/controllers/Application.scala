@@ -1,14 +1,9 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
 import model.Payload
 
 object Application extends Controller {
-  
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
-  }
 
   def deploy(path:String) = Action {request =>
 
