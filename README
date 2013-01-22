@@ -1,4 +1,4 @@
-This is your new Play 2.0 application
-=====================================
+Git hub hook
+===
 
-This file will be packaged with your application, when using `play dist`.
+This play2 application handle github webhook to run a script that deploy an other app
