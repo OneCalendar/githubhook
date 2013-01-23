@@ -1,5 +1,6 @@
 package controllers
 
+import play.api._
 import play.api.mvc._
 import model.Payload
 import play.api.data._
@@ -12,8 +13,17 @@ object Application extends Controller {
 
   case class GithubRequest(payload:String)
 
-  def show = Action {
+  def payload = Action {
     Ok(lastPayload)
+  }
+
+  def welcome = Action {
+    Ok(views.html.welcome())
+  }
+
+  def log = Action {
+    import sys.process._
+    Ok("cat /root/compile_async.log".!!)
   }
   def deploy = Action {implicit request  =>
 
@@ -26,7 +36,7 @@ object Application extends Controller {
     if (payload.ref.contains("master") && payload.repository.url.contains("OneCalendar")) {
       import sys.process._
       try {
-        val r: String = "/root/compile".!!
+        val r: String = "/root/compile_async".!!
         Ok(r).as("plain/text")
       } catch {
         case e:Exception => InternalServerError(e.toString)

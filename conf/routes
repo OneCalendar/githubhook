@@ -3,5 +3,7 @@
 # ~~~~
 
 # Home page
+GET      /             controllers.Application.welcome
 POST     /             controllers.Application.deploy
-GET      /             controllers.Application.show
+GET      /payload      controllers.Application.payload
+GET      /log          controllers.Application.log
